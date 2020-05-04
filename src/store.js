@@ -1,56 +1,55 @@
-import {createStore} from 'redux';
+import { configureStore, createSlice } from '@reduxjs/toolkit';
 
-const ADD="ADD";
-const DELETE="DELETE";
-const SET = "SET";
 
-const addToDo = (text) => {
-    return {
-        type: ADD,
-        text,
-    }
-}
+/* 
+const addToDo = createAction("ADD");
+const deleteToDo = createAction("DELETE");
+const setToDo = createAction("SET");
 
-const deleteToDo = (id) => {
-    return {
-        type: DELETE,
-        id: parseInt(id)
-    }
-}
+ const reducer = createReducer([], {
+    [addToDo]: (state, action) => {
+        state.push( {text: action.payload, id: Date.now() });
+        localStorage.setItem("toDos", JSON.stringify(state));
+    },
+    [deleteToDo]: (state, action) => {
+        const filtered = state.filter(toDo => toDo.id !== action.payload);
+        localStorage.setItem("toDos", JSON.stringify(filtered));
+        return filtered;
+    },
+    [setToDo]: (state, action) => {
+        const storedToDos = JSON.parse(localStorage.getItem("toDos"));
+        return storedToDos;
+    },
+ });
 
-const setToDo = () => {
-    return {
-        type: SET
-    }
-}
+  */
 
-const reducer = (state = [], action) => {
-    switch(action.type){
-        case ADD:
-            const newToDoobj = [{text: action.text, id: Date.now()}, ...state];
-            localStorage.setItem("toDos", JSON.stringify(newToDoobj));
-            return newToDoobj;
-        
-        case DELETE:
-            const filtered = state.filter(toDo => toDo.id !== action.id);
+  const toDos = createSlice({
+      name: 'toDosReducer',
+      initialState: [],
+      reducers: {
+          add: (state, action) => {
+            state.push( {text: action.payload, id: Date.now() });
+            localStorage.setItem("toDos", JSON.stringify(state));
+          },
+          remove: (state, action) => {
+            const filtered = state.filter(toDo => toDo.id !== action.payload);
             localStorage.setItem("toDos", JSON.stringify(filtered));
             return filtered;
-
-        case SET:
+          },
+          set: (state, action) => {
             const storedToDos = JSON.parse(localStorage.getItem("toDos"));
             return storedToDos;
-        default:
-            return state;
-    }
-}
+          }
+      }
+  });
 
-const store = createStore(reducer);
+const store = configureStore({reducer: toDos.reducer});
 
-export const actionCreators = {
-    addToDo,
-    deleteToDo,
-    setToDo
-
-};
+export const {
+    add,
+    remove,
+    set
+} = toDos.actions;
 
 export default store;

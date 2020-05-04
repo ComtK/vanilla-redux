@@ -3,7 +3,7 @@ import { HashRouter as Router, Route } from 'react-router-dom';
 import Home from '../routes/Home';
 import Detail from '../routes/Detail';
 import { connect } from 'react-redux';
-import { actionCreators } from '../store';
+import { set } from '../store';
 
 class App extends React.Component {
     componentDidMount() {
@@ -22,7 +22,7 @@ class App extends React.Component {
 
 function mapDispatchToprops(dispatch, ownProps){
     return {
-       setToDo: () => dispatch(actionCreators.setToDo())
+       setToDo: () => dispatch(set())
     }
 }
 
